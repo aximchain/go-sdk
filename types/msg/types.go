@@ -3,9 +3,9 @@ package msg
 import (
 	"math/big"
 
+	bridgeTypes "github.com/aximchain/beacon-node/plugins/bridge/types"
+	"github.com/aximchain/beacon-node/plugins/dex/order"
 	sdk "github.com/aximchain/go-sdk/common/types"
-	bridgeTypes "github.com/bnb-chain/node/plugins/bridge/types"
-	"github.com/bnb-chain/node/plugins/dex/order"
 	cTypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/gov"

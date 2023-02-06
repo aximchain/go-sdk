@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/axc/rlp"
 
+	"github.com/aximchain/beacon-node/plugins/tokens/swap"
 	"github.com/aximchain/go-sdk/common/types"
-	"github.com/bnb-chain/node/plugins/tokens/swap"
 	cTypes "github.com/cosmos/cosmos-sdk/types"
 )
 

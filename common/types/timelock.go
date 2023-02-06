@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/bnb-chain/node/plugins/tokens/timelock"
+	"github.com/aximchain/beacon-node/plugins/tokens/timelock"
 )
 
 type (

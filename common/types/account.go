@@ -1,7 +1,7 @@
 package types
 
 import (
-	nodeTypes "github.com/bnb-chain/node/common/types"
+	nodeTypes "github.com/aximchain/beacon-node/common/types"
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 )
