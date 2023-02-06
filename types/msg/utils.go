@@ -3,7 +3,7 @@ package msg
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/bsc/rlp"
+	"github.com/cosmos/cosmos-sdk/axc/rlp"
 
 	"github.com/aximchain/go-sdk/common/types"
 	"github.com/bnb-chain/node/plugins/tokens/swap"

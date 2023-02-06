@@ -3,7 +3,6 @@ module github.com/aximchain/go-sdk
 go 1.17
 
 require (
-	github.com/bnb-chain/node v0.10.6
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/btcsuite/btcutil v0.0.0-20190425235716-9e5f4b9a998d
 	github.com/cosmos/cosmos-sdk v0.25.0
@@ -71,6 +70,7 @@ require (
 )
 
 replace (
+    github.com/bnb-chain/node => github.com/aximchain/beacon-node v0.1.2
 	github.com/cosmos/cosmos-sdk => github.com/aximchain/axc-cosmos-sdk v0.1.1-1675651356924-53e251c04261
 	github.com/tendermint/go-amino => github.com/bnb-chain/bnc-go-amino v0.14.1-binance.2
 	github.com/tendermint/iavl => github.com/bnb-chain/bnc-tendermint-iavl v0.12.0-binance.4
