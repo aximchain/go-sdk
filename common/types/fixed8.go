@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/bnb-chain/node/common/utils"
+	"github.com/aximchain/flash-node/common/utils"
 )
 
 var (

@@ -1,6 +1,6 @@
 package types
 
-import "github.com/bnb-chain/node/plugins/account/scripts"
+import "github.com/aximchain/flash-node/plugins/account/scripts"
 
 type FlagOption = uint64
 

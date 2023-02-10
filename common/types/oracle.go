@@ -3,8 +3,8 @@ package types
 import (
 	"encoding/binary"
 
-	ctypes "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/sidechain"
+	ctypes "github.com/aximchain/axc-cosmos-sdk/types"
+	"github.com/aximchain/axc-cosmos-sdk/x/sidechain"
 )
 
 type IbcChannelID = ctypes.ChannelID

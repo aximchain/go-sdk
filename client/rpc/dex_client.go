@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	cTypes "github.com/aximchain/axc-cosmos-sdk/types"
 	"github.com/aximchain/go-sdk/common"
 	"github.com/aximchain/go-sdk/common/types"
 	sdk "github.com/aximchain/go-sdk/common/types"
@@ -14,7 +15,6 @@ import (
 	gtypes "github.com/aximchain/go-sdk/types"
 	"github.com/aximchain/go-sdk/types/msg"
 	"github.com/aximchain/go-sdk/types/tx"
-	cTypes "github.com/cosmos/cosmos-sdk/types"
 	core_types "github.com/tendermint/tendermint/rpc/core/types"
 )
 

@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/types"
+	"github.com/aximchain/axc-cosmos-sdk/types"
 )
 
 type AccAddress = types.AccAddress

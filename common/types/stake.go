@@ -1,9 +1,9 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/stake"
-	stakeTypes "github.com/cosmos/cosmos-sdk/x/stake/types"
+	"github.com/aximchain/axc-cosmos-sdk/types"
+	"github.com/aximchain/axc-cosmos-sdk/x/stake"
+	stakeTypes "github.com/aximchain/axc-cosmos-sdk/x/stake/types"
 )
 
 // nolint

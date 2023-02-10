@@ -3,12 +3,11 @@ module github.com/aximchain/go-sdk
 go 1.17
 
 require (
-	github.com/bnb-chain/node v0.10.6
+	github.com/aximchain/axc-cosmos-sdk v0.1.5
+	github.com/aximchain/flash-node v0.1.4
 	github.com/btcsuite/btcd v0.20.1-beta
-	github.com/btcsuite/btcutil v0.0.0-20190425235716-9e5f4b9a998d
-	github.com/cosmos/cosmos-sdk v0.25.0
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
-	github.com/gorilla/websocket v1.4.1-0.20190629185528-ae1634f6a989
+	github.com/gorilla/websocket v1.4.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1
 	github.com/tendermint/btcd v0.1.1
@@ -23,13 +22,14 @@ require (
 	github.com/bartekn/go-bip39 v0.0.0-20171116152956-a05967ea095d // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
+	github.com/btcsuite/btcutil v0.0.0-20190425235716-9e5f4b9a998d // indirect
 	github.com/cosmos/ledger-go v0.9.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/etcd-io/bbolt v1.3.3 // indirect
 	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
-	github.com/gogo/protobuf v1.3.1 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/btree v1.0.0 // indirect
@@ -46,6 +46,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/pelletier/go-toml v1.4.0 // indirect
+	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.1.0 // indirect
 	github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90 // indirect
@@ -53,6 +54,7 @@ require (
 	github.com/prometheus/procfs v0.0.3 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20190826022208-cac0b30c2563 // indirect
 	github.com/rs/cors v1.6.0 // indirect
+	github.com/sasha-s/go-deadlock v0.2.1-0.20180822072021-d68e2bc52ae3 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.0 // indirect
 	github.com/spf13/cobra v0.0.5 // indirect
@@ -67,11 +69,10 @@ require (
 	golang.org/x/text v0.5.0 // indirect
 	google.golang.org/genproto v0.0.0-20190425155659-357c62f0e4bb // indirect
 	google.golang.org/grpc v1.23.0 // indirect
-	gopkg.in/yaml.v2 v2.2.4 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => github.com/aximchain/axc-cosmos-sdk v0.1.1-1675651356924-53e251c04261
 	github.com/tendermint/go-amino => github.com/bnb-chain/bnc-go-amino v0.14.1-binance.2
 	github.com/tendermint/iavl => github.com/bnb-chain/bnc-tendermint-iavl v0.12.0-binance.4
 	github.com/tendermint/tendermint => github.com/bnb-chain/bnc-tendermint v0.32.3-binance.3.0.20221109023026-379ddbab19d1

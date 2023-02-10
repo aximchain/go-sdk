@@ -1,9 +1,9 @@
 package types
 
 import (
-	nodeTypes "github.com/bnb-chain/node/common/types"
-	"github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/aximchain/axc-cosmos-sdk/types"
+	"github.com/aximchain/axc-cosmos-sdk/x/auth"
+	nodeTypes "github.com/aximchain/flash-node/common/types"
 )
 
 type (
