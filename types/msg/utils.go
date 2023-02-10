@@ -3,11 +3,11 @@ package msg
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/axc/rlp"
+	"github.com/aximchain/axc-cosmos-sdk/asc/rlp"
 
-	"github.com/aximchain/beacon-node/plugins/tokens/swap"
+	cTypes "github.com/aximchain/axc-cosmos-sdk/types"
+	"github.com/aximchain/flash-node/plugins/tokens/swap"
 	"github.com/aximchain/go-sdk/common/types"
-	cTypes "github.com/cosmos/cosmos-sdk/types"
 )
 
 var (

@@ -3,20 +3,20 @@ package msg
 import (
 	"math/big"
 
-	bridgeTypes "github.com/aximchain/beacon-node/plugins/bridge/types"
-	"github.com/aximchain/beacon-node/plugins/dex/order"
+	cTypes "github.com/aximchain/axc-cosmos-sdk/types"
+	"github.com/aximchain/axc-cosmos-sdk/x/bank"
+	"github.com/aximchain/axc-cosmos-sdk/x/gov"
+	"github.com/aximchain/axc-cosmos-sdk/x/ibc"
+	oracleTypes "github.com/aximchain/axc-cosmos-sdk/x/oracle/types"
+	paramHubTypes "github.com/aximchain/axc-cosmos-sdk/x/paramHub/types"
+	sidechainTypes "github.com/aximchain/axc-cosmos-sdk/x/sidechain/types"
+	slashingTypes "github.com/aximchain/axc-cosmos-sdk/x/slashing"
+	"github.com/aximchain/axc-cosmos-sdk/x/stake"
+	crossStake "github.com/aximchain/axc-cosmos-sdk/x/stake/cross_stake"
+	stakeTypes "github.com/aximchain/axc-cosmos-sdk/x/stake/types"
+	bridgeTypes "github.com/aximchain/flash-node/plugins/bridge/types"
+	"github.com/aximchain/flash-node/plugins/dex/order"
 	sdk "github.com/aximchain/go-sdk/common/types"
-	cTypes "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/bank"
-	"github.com/cosmos/cosmos-sdk/x/gov"
-	"github.com/cosmos/cosmos-sdk/x/ibc"
-	oracleTypes "github.com/cosmos/cosmos-sdk/x/oracle/types"
-	paramHubTypes "github.com/cosmos/cosmos-sdk/x/paramHub/types"
-	sidechainTypes "github.com/cosmos/cosmos-sdk/x/sidechain/types"
-	slashingTypes "github.com/cosmos/cosmos-sdk/x/slashing"
-	"github.com/cosmos/cosmos-sdk/x/stake"
-	crossStake "github.com/cosmos/cosmos-sdk/x/stake/cross_stake"
-	stakeTypes "github.com/cosmos/cosmos-sdk/x/stake/types"
 )
 
 type (
@@ -107,7 +107,7 @@ type (
 	IbcValidator                = stakeTypes.IbcValidator
 	CrossParamChange            = paramHubTypes.CSCParamChange
 	SideDowntimeSlashPackage    = slashingTypes.SideDowntimeSlashPackage
-	CrossStakeSynPackageFromAXC = crossStake.CrossStakeSynPackageFromAXC
+	CrossStakeSynPackageFromASC = crossStake.CrossStakeSynPackageFromASC
 	CrossStakeRefundPackage     = stakeTypes.CrossStakeRefundPackage
 )
 
@@ -185,7 +185,7 @@ var protoMetrics = map[sdk.IbcChannelID]map[CrossChainPackageType]func() interfa
 	},
 	sdk.IbcChannelID(16): {
 		SynCrossChainPackageType: func() interface{} {
-			return new(CrossStakeSynPackageFromAXC)
+			return new(CrossStakeSynPackageFromASC)
 		},
 		AckCrossChainPackageType: func() interface{} {
 			return new(CrossStakeRefundPackage)

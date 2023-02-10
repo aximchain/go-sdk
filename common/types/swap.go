@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/aximchain/beacon-node/plugins/tokens/swap"
+	"github.com/aximchain/flash-node/plugins/tokens/swap"
 )
 
 const (

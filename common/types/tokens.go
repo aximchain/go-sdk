@@ -1,8 +1,8 @@
 package types
 
 import (
-	nodeTypes "github.com/aximchain/beacon-node/common/types"
-	"github.com/aximchain/beacon-node/plugins/tokens/client/rest"
+	nodeTypes "github.com/aximchain/flash-node/common/types"
+	"github.com/aximchain/flash-node/plugins/tokens/client/rest"
 )
 
 type (

@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/x/stake/querier"
-	stakeTypes "github.com/cosmos/cosmos-sdk/x/stake/types"
+	"github.com/aximchain/axc-cosmos-sdk/x/stake/querier"
+	stakeTypes "github.com/aximchain/axc-cosmos-sdk/x/stake/types"
 )
 
 type (

@@ -1,8 +1,8 @@
 package ledger
 
 import (
+	stypes "github.com/aximchain/axc-cosmos-sdk/types"
 	"github.com/btcsuite/btcd/btcec"
-	stypes "github.com/cosmos/cosmos-sdk/types"
 	tmbtcec "github.com/tendermint/btcd/btcec"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"

@@ -1,9 +1,9 @@
 package tx
 
 import (
-	"github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	context "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
+	"github.com/aximchain/axc-cosmos-sdk/types"
+	"github.com/aximchain/axc-cosmos-sdk/x/auth"
+	context "github.com/aximchain/axc-cosmos-sdk/x/auth/client/txbuilder"
 )
 
 const Source int64 = 0

@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/types"
-	paramHubTypes "github.com/cosmos/cosmos-sdk/x/paramHub/types"
+	"github.com/aximchain/axc-cosmos-sdk/types"
+	paramHubTypes "github.com/aximchain/axc-cosmos-sdk/x/paramHub/types"
 )
 
 const (
