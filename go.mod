@@ -3,8 +3,8 @@ module github.com/aximchain/go-sdk
 go 1.17
 
 require (
-	github.com/aximchain/axc-cosmos-sdk v0.1.5
-	github.com/aximchain/flash-node v0.1.4
+	github.com/aximchain/axc-cosmos-sdk v0.1.8
+	github.com/aximchain/flash-node v0.1.5
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
 	github.com/gorilla/websocket v1.4.1
@@ -14,7 +14,7 @@ require (
 	github.com/tendermint/go-amino v0.15.0
 	github.com/tendermint/tendermint v0.32.3
 	github.com/zondax/ledger-cosmos-go v0.9.9
-	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+	golang.org/x/crypto v0.5.0
 	gopkg.in/resty.v1 v1.12.0
 )
 
