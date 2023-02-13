@@ -13,7 +13,7 @@ import (
 
 // To run this example, please make sure your key address have more than 1:AXC on testnet
 func main() {
-	types.SetNetwork(types.TestNetwork)
+	types.Network = types.TestNetwork
 
 	//Check whether there are variable ledger devices
 	ledgerDevice, err := ledger.DiscoverLedger()
@@ -27,7 +27,7 @@ func main() {
 		return
 	}
 
-	bip44Params := keys.NewBinanceBIP44Params(0, 0)
+	bip44Params := keys.NewAximchainBIP44Params(0, 0)
 	keyManager, err := keys.NewLedgerKeyManager(bip44Params.DerivationPath())
 	if err != nil {
 		fmt.Println(err.Error())

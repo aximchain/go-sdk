@@ -1,9 +1,7 @@
 package types
 
-import "github.com/aximchain/flash-node/plugins/account/scripts"
-
-type FlagOption = uint64
+type FlagOption uint64
 
 const (
-	TransferMemoCheckerFlag = scripts.TransferMemoCheckerFlag
+	TransferMemoCheckerFlag FlagOption = 0x0000000000000001
 )

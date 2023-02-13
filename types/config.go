@@ -7,11 +7,8 @@ const (
 	DefaultWSPrefix         = "/api/ws"
 	NativeSymbol            = "AXC"
 
-	ProdChainID    = "Aximchain-Tigris"
-	TestnetChainID = "Aximchain-Ganges"
-	KongoChainId   = "Aximchain-Kongo"
-	GangesChainId  = "Aximchain-Ganges"
-
-	RialtoNet = "rialto"
-	ChapelNet = "chapel"
+	ProdChainID       = "Aximchain-Tigris"
+	TestnetChainID    = "Aximchain-Nile"
+	TmpTestnetChainId = "Aximchain-Kongo"
+	RialtoNet         = "rialto"
 )

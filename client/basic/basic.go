@@ -30,19 +30,14 @@ type BasicClient interface {
 type client struct {
 	baseUrl string
 	apiUrl  string
-	apiKey  string
 }
 
-func NewClient(baseUrl string, apiKey string) BasicClient {
-	return &client{baseUrl: baseUrl, apiUrl: fmt.Sprintf("%s://%s", types.DefaultApiSchema, baseUrl+types.DefaultAPIVersionPrefix), apiKey: apiKey}
+func NewClient(baseUrl string) BasicClient {
+	return &client{baseUrl: baseUrl, apiUrl: fmt.Sprintf("%s://%s", types.DefaultApiSchema, baseUrl+types.DefaultAPIVersionPrefix)}
 }
 
 func (c *client) Get(path string, qp map[string]string) ([]byte, int, error) {
-	request := resty.R().SetQueryParams(qp)
-	if c.apiKey != "" {
-		request.SetHeader("apikey", c.apiKey)
-	}
-	resp, err := request.Get(c.apiUrl + path)
+	resp, err := resty.R().SetQueryParams(qp).Get(c.apiUrl + path)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -54,14 +49,11 @@ func (c *client) Get(path string, qp map[string]string) ([]byte, int, error) {
 
 // Post generic method
 func (c *client) Post(path string, body interface{}, param map[string]string) ([]byte, error) {
-	request := resty.R().
+	resp, err := resty.R().
 		SetHeader("Content-Type", "text/plain").
 		SetBody(body).
-		SetQueryParams(param)
-	if c.apiKey != "" {
-		request.SetHeader("apikey", c.apiKey)
-	}
-	resp, err := request.Post(c.apiUrl + path)
+		SetQueryParams(param).
+		Post(c.apiUrl + path)
 
 	if err != nil {
 		return nil, err

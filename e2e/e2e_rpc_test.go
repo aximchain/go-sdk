@@ -7,44 +7,38 @@ import (
 	"fmt"
 	"math/rand"
 	"os/exec"
-	"strconv"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	tmquery "github.com/tendermint/tendermint/libs/pubsub/query"
+	"github.com/tendermint/tendermint/types"
 
 	"github.com/aximchain/go-sdk/client/rpc"
 	"github.com/aximchain/go-sdk/client/transaction"
 	ctypes "github.com/aximchain/go-sdk/common/types"
 	"github.com/aximchain/go-sdk/keys"
-	stypes "github.com/aximchain/go-sdk/types"
 	"github.com/aximchain/go-sdk/types/msg"
-	"github.com/aximchain/go-sdk/types/tx"
-	"github.com/stretchr/testify/assert"
-	"github.com/tendermint/tendermint/libs/common"
-	tmquery "github.com/tendermint/tendermint/libs/pubsub/query"
-	"github.com/tendermint/tendermint/types"
 )
 
 var (
 	nodeAddr           = "tcp://data-seed-pre-0-s3.binance.org:80"
 	badAddr            = "tcp://127.0.0.1:80"
-	testTxHash         = "6165507B990A1CCAD1758512382C6B76F952CC945ABB84D9BF18160C11DE902A"
-	testTxHeight       = int64(34762951)
-	testAddress        = "taxc1e803p76n4rtyeclef7pg3295nurwfuwsw8l36m"
-	testDelAddr        = "taxc12hlquylu78cjylk5zshxpdj6hf3t0tahwjt3ex"
+	testTxHash         = "F45BAB1BA5B79609F7307A64AD1F84ECFAF73D1F2C2D010D17F41303BC1B00CA"
+	testTxHeight       = int64(47905085)
+	testAddress        = "tbnb1e803p76n4rtyeclef7pg3295nurwfuwsw8l36m"
+	testDelAddr        = "tbnb12hlquylu78cjylk5zshxpdj6hf3t0tahwjt3ex"
 	testTradePair      = "PPC-00A_AXC"
 	testTradeSymbol    = "000-0E1"
 	testTxStr          = "xxx"
-	testNewOwner       = "taxc1rtzy6szuyzcj4amfn6uarvne8a5epxrdc28nhr"
 	mnemonic           = "test mnemonic"
 	onceClient         = sync.Once{}
 	testClientInstance *rpc.HTTP
-
-	scParams = `[{"type": "params/StakeParamSet","value": {"unbonding_time": "604800000000000","max_validators": 11,"bond_denom": "AXC","min_self_delegation": "5000000000000","min_delegation_change": "100000000"}},{"type": "params/SlashParamSet","value": {"max_evidence_age": "259200000000000","signed_blocks_window": "0","min_signed_per_window": "0","double_sign_unbond_duration": "9223372036854775807","downtime_unbond_duration": "172800000000000","too_low_del_unbond_duration": "86400000000000","slash_fraction_double_sign": "0","slash_fraction_downtime": "0","double_sign_slash_amount": "1000000000000","downtime_slash_amount": "5000000000","submitter_reward": "100000000000","downtime_slash_fee": "1000000000"}},{"type": "params/OracleParamSet","value": {"ConsensusNeeded": "70000000"}},{"type": "params/IbcParamSet","value": {"relayer_fee": "1000000"}}]`
 )
 
 func startAxcchaind(t *testing.T) *exec.Cmd {
-	cmd := exec.Command("axcchaind", "start", "--home", "testnoded")
+	cmd := exec.Command("bnbchaind", "start", "--home", "testnoded")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &out
@@ -104,7 +98,7 @@ func TestRPCGetTimelock(t *testing.T) {
 
 func TestRPCGetProposal(t *testing.T) {
 	c := defaultClient()
-	proposal, err := c.GetProposal(int64(100))
+	proposal, err := c.GetProposal(int64(1))
 	assert.NoError(t, err)
 	bz, err := json.Marshal(proposal)
 	fmt.Println(string(bz))
@@ -225,22 +219,6 @@ func TestTx(t *testing.T) {
 	fmt.Println(string(bz))
 }
 
-func TestClaimTx(t *testing.T) {
-	c := defaultClient()
-	bz, err := hex.DecodeString(testTxHash)
-	assert.NoError(t, err)
-
-	rawTx, err := c.Tx(bz, false)
-	assert.NoError(t, err)
-	claimTx, err := rpc.ParseTx(tx.Cdc, rawTx.Tx)
-	claimMsg := claimTx.GetMsgs()[0].(msg.ClaimMsg)
-	packages, err := msg.ParseClaimPayload(claimMsg.Payload)
-	assert.NoError(t, err)
-	newBz, err := json.Marshal(packages)
-	assert.NoError(t, err)
-	fmt.Println(string(newBz))
-}
-
 func TestReconnection(t *testing.T) {
 	repeatNum := 10
 	c := defaultClient()
@@ -313,6 +291,17 @@ func TestBadNodeAddr(t *testing.T) {
 	assert.Error(t, err, "context deadline exceeded")
 }
 
+func TestSetTimeOut(t *testing.T) {
+	c := rpc.NewRPCClient(badAddr, ctypes.TestNetwork)
+	c.SetTimeOut(1 * time.Second)
+	before := time.Now()
+	_, err := c.Validators(nil)
+	duration := time.Now().Sub(before).Seconds()
+	assert.True(t, duration > 1)
+	assert.True(t, duration < 2)
+	assert.Error(t, err, "context deadline exceeded")
+}
+
 func TestSubscribeEvent(t *testing.T) {
 	c := defaultClient()
 	query := "tm.event = 'CompleteProposal'"
@@ -353,9 +342,9 @@ func TestSubscribeEventTwice(t *testing.T) {
 
 func TestReceiveWithRequestId(t *testing.T) {
 	c := defaultClient()
-	c.SetTimeOut(2 * time.Second)
+	c.SetTimeOut(1 * time.Second)
 	w := sync.WaitGroup{}
-	w.Add(100)
+	w.Add(2000)
 	testCases := []func(t *testing.T){
 		TestRPCStatus,
 		TestRPCABCIInfo,
@@ -374,7 +363,7 @@ func TestReceiveWithRequestId(t *testing.T) {
 		//TestTxSearch,
 		TestValidators,
 	}
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 2000; i++ {
 		testFuncIndex := rand.Intn(len(testCases))
 		go func() {
 			testCases[testFuncIndex](t)
@@ -386,7 +375,7 @@ func TestReceiveWithRequestId(t *testing.T) {
 
 func TestListAllTokens(t *testing.T) {
 	c := defaultClient()
-	tokens, err := c.ListAllTokens(0, 10)
+	tokens, err := c.ListAllTokens(1, 10)
 	assert.NoError(t, err)
 	bz, err := json.Marshal(tokens)
 	fmt.Println(string(bz))
@@ -401,7 +390,7 @@ func TestGetTokenInfo(t *testing.T) {
 }
 
 func TestGetAccount(t *testing.T) {
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	c := defaultClient()
 	acc, err := ctypes.AccAddressFromBech32(testAddress)
 	assert.NoError(t, err)
@@ -413,7 +402,7 @@ func TestGetAccount(t *testing.T) {
 }
 
 func TestNoneExistGetAccount(t *testing.T) {
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	c := defaultClient()
 	acc, err := keys.NewKeyManager()
 	account, err := c.GetAccount(acc.GetAddr())
@@ -422,19 +411,19 @@ func TestNoneExistGetAccount(t *testing.T) {
 }
 
 func TestGetBalances(t *testing.T) {
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	c := defaultClient()
 	acc, err := ctypes.AccAddressFromBech32(testAddress)
 	assert.NoError(t, err)
 	balances, err := c.GetBalances(acc)
-	assert.Equal(t, 1, len(balances))
+	assert.Equal(t, 0, len(balances))
 	assert.NoError(t, err)
 	bz, err := json.Marshal(balances)
 	fmt.Println(string(bz))
 }
 
 func TestNoneExistGetBalances(t *testing.T) {
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	c := defaultClient()
 	acc, _ := keys.NewKeyManager()
 	balances, err := c.GetBalances(acc.GetAddr())
@@ -444,7 +433,7 @@ func TestNoneExistGetBalances(t *testing.T) {
 }
 
 func TestGetBalance(t *testing.T) {
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	c := defaultClient()
 	acc, err := ctypes.AccAddressFromBech32(testAddress)
 	assert.NoError(t, err)
@@ -455,7 +444,7 @@ func TestGetBalance(t *testing.T) {
 }
 
 func TestNoneExistGetBalance(t *testing.T) {
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	c := defaultClient()
 	acc, _ := keys.NewKeyManager()
 	balance, err := c.GetBalance(acc.GetAddr(), "AXC")
@@ -475,9 +464,37 @@ func TestGetFees(t *testing.T) {
 	fmt.Println(string(bz))
 }
 
+func TestGetOpenOrder(t *testing.T) {
+	ctypes.Network = ctypes.TestNetwork
+	acc, err := ctypes.AccAddressFromBech32(testAddress)
+	assert.NoError(t, err)
+	c := defaultClient()
+	openorders, err := c.GetOpenOrders(acc, testTradePair)
+	assert.NoError(t, err)
+	bz, err := json.Marshal(openorders)
+	assert.NoError(t, err)
+	fmt.Println(string(bz))
+}
+
+func TestGetTradePair(t *testing.T) {
+	c := defaultClient()
+	trades, err := c.GetTradingPairs(0, 10)
+	assert.NoError(t, err)
+	bz, err := json.Marshal(trades)
+	fmt.Println(string(bz))
+}
+
+func TestGetDepth(t *testing.T) {
+	c := defaultClient()
+	depth, err := c.GetDepth(testTradePair, 2)
+	assert.NoError(t, err)
+	bz, err := json.Marshal(depth)
+	fmt.Println(string(bz))
+}
+
 func TestSendToken(t *testing.T) {
 	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	keyManager, err := keys.NewMnemonicKeyManager(mnemonic)
 	assert.NoError(t, err)
 	c.SetKeyManager(keyManager)
@@ -489,78 +506,28 @@ func TestSendToken(t *testing.T) {
 	fmt.Println(string(bz))
 }
 
-func TestQuerySideChainParam(t *testing.T) {
+func TestCreateOrder(t *testing.T) {
 	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
-	params, err := c.GetSideChainParams("chapel")
+	ctypes.Network = ctypes.TestNetwork
+	keyManager, err := keys.NewMnemonicKeyManager(mnemonic)
 	assert.NoError(t, err)
-	bz, _ := json.Marshal(params)
+	c.SetKeyManager(keyManager)
+	createOrderResult, err := c.CreateOrder(testTradeSymbol, "AXC", msg.OrderSide.BUY, 100000000, 100000000, rpc.Commit, transaction.WithSource(100), transaction.WithMemo("test memo"))
+
+	assert.NoError(t, err)
+	bz, err := json.Marshal(createOrderResult)
 	fmt.Println(string(bz))
-}
+	fmt.Println(createOrderResult.Hash.String())
 
-func TestSubmitSideProposal(t *testing.T) {
-	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
-
-	keyManager, err := keys.NewMnemonicKeyManager(mnemonic)
-	assert.NoError(t, err)
-	c.SetKeyManager(keyManager)
-
-	iScPrams := make([]msg.SCParam, 0)
-
-	err = tx.Cdc.UnmarshalJSON([]byte(scParams), &iScPrams)
-	assert.NoError(t, err)
-
-	res, err := c.SideChainSubmitSCParamsProposal("title", msg.SCChangeParams{SCParams: iScPrams, Description: "des"}, ctypes.Coins{{stypes.NativeSymbol, 5e11}}, 5*time.Second, "rialto", rpc.Sync)
-	assert.NoError(t, err)
-	assert.True(t, res.Code == 0)
-	proposalIdStr := string(res.Data)
-	id, err := strconv.ParseInt(proposalIdStr, 10, 64)
-	assert.NoError(t, err)
-	res, err = c.SideChainVote(int64(id), msg.OptionYes, "rialto", rpc.Sync)
-	assert.NoError(t, err)
-	assert.True(t, res.Code == 0)
-}
-
-func TestSubmitCSCProposal(t *testing.T) {
-	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
-
-	keyManager, err := keys.NewMnemonicKeyManager(mnemonic)
-	assert.NoError(t, err)
-	c.SetKeyManager(keyManager)
-
-	cscPrams := msg.CSCParamChange{
-		Key:    common.RandStr(common.RandIntn(255) + 1),
-		Value:  hex.EncodeToString(common.RandBytes(common.RandIntn(255) + 1)),
-		Target: hex.EncodeToString(common.RandBytes(20)),
+	type commitData struct {
+		OrderId string `json:"order_id"`
 	}
-
-	res, err := c.SideChainSubmitCSCParamsProposal("title", cscPrams, ctypes.Coins{{stypes.NativeSymbol, 5e8}}, 5*time.Second, "chapel", rpc.Sync)
+	var cdata commitData
+	err = json.Unmarshal([]byte(createOrderResult.Data), &cdata)
 	assert.NoError(t, err)
-	assert.True(t, res.Code == 0)
-
-	proposalIdStr := string(res.Data)
-	id, err := strconv.ParseInt(proposalIdStr, 10, 64)
+	cancleOrderResult, err := c.CancelOrder(testTradeSymbol, "AXC", cdata.OrderId, rpc.Commit)
 	assert.NoError(t, err)
-	res, err = c.SideChainDeposit(int64(id), ctypes.Coins{{"AXC", 1e8}}, "chapel", rpc.Sync)
-	assert.NoError(t, err)
-	assert.True(t, res.Code == 0)
-
-}
-
-func TestTransferTokenOwnership(t *testing.T) {
-	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
-	keyManager, err := keys.NewMnemonicKeyManager(mnemonic)
-	assert.NoError(t, err)
-	c.SetKeyManager(keyManager)
-	fmt.Println(keyManager.GetAddr().String())
-	newOwner, err := ctypes.AccAddressFromBech32(testNewOwner)
-	assert.NoError(t, err)
-	result, err := c.TransferTokenOwnership(testTradeSymbol, newOwner, rpc.Commit)
-	assert.NoError(t, err)
-	bz, _ := json.Marshal(result)
+	bz, _ = json.Marshal(cancleOrderResult)
 	fmt.Println(string(bz))
 }
 
@@ -575,7 +542,7 @@ func TestBroadcastTxCommit(t *testing.T) {
 
 func TestGetStakeValidators(t *testing.T) {
 	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	vals, err := c.GetStakeValidators()
 	assert.NoError(t, err)
 	bz, err := json.Marshal(vals)
@@ -584,7 +551,7 @@ func TestGetStakeValidators(t *testing.T) {
 
 func TestGetDelegatorUnbondingDelegations(t *testing.T) {
 	c := defaultClient()
-	ctypes.SetNetwork(ctypes.TestNetwork)
+	ctypes.Network = ctypes.TestNetwork
 	acc, err := ctypes.AccAddressFromBech32(testDelAddr)
 	assert.NoError(t, err)
 	vals, err := c.GetDelegatorUnbondingDelegations(acc)
@@ -610,10 +577,10 @@ func TestNoRequestLeakInBadNetwork(t *testing.T) {
 
 func TestNoRequestLeakInGoodNetwork(t *testing.T) {
 	c := defaultClient()
-	c.SetTimeOut(2 * time.Second)
+	c.SetTimeOut(1 * time.Second)
 	w := sync.WaitGroup{}
-	w.Add(100)
-	for i := 0; i < 100; i++ {
+	w.Add(3000)
+	for i := 0; i < 3000; i++ {
 		go func() {
 			_, err := c.Block(nil)
 			assert.NoError(t, err)
@@ -624,24 +591,4 @@ func TestNoRequestLeakInGoodNetwork(t *testing.T) {
 	}
 	w.Wait()
 	assert.Equal(t, c.PendingRequest(), 0)
-}
-
-func TestListAllMiniTokens(t *testing.T) {
-	c := defaultClient()
-	tokens, err := c.ListAllMiniTokens(0, 10)
-	assert.NoError(t, err)
-	bz, err := json.Marshal(tokens)
-	fmt.Println(string(bz))
-}
-
-func TestGetMiniTokenInfo(t *testing.T) {
-	c := defaultClient()
-	tokens, err := c.ListAllMiniTokens(0, 10)
-	assert.NoError(t, err)
-	if len(tokens) > 0 {
-		token, err := c.GetMiniTokenInfo(tokens[0].Symbol)
-		assert.NoError(t, err)
-		bz, err := json.Marshal(token)
-		fmt.Println(string(bz))
-	}
 }

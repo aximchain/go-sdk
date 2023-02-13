@@ -1,6 +1,7 @@
-# AXC Flash Chain Go SDK
+# BNC Chain Go SDK
 
-The AXC Flash Chain GO SDK provides a thin wrapper around the AXC Flash Chain API for readonly endpoints, in addition to creating and submitting different transactions.
+
+The AXC Flash Chain GO SDK provides a thin wrapper around the BNC Chain API for readonly endpoints, in addition to creating and submitting different transactions.
 It includes the following core components:
 
 * **client** - implementations of AXC Flash Chain transaction types and query, such as for transfers and trading.
@@ -13,35 +14,26 @@ It includes the following core components:
 
 ### Requirement
 
-Go version above 1.17
+Go version above 1.11
 
-### Use go mod
+### Use go mod(recommend)
 
 Add "github.com/aximchain/go-sdk" dependency into your go.mod file. Example:
 ```go
 require (
 	github.com/aximchain/go-sdk latest
 )
-
-// Copy the same replace dep from https://github.com/aximchain/go-sdk/blob/master/go.mod
-replace (
-    github.com/tendermint/go-amino => github.com/bnb-chain/bnc-go-amino v0.14.1-binance.2
-    github.com/tendermint/iavl => github.com/bnb-chain/bnc-tendermint-iavl v0.12.0-binance.4
-    github.com/tendermint/tendermint => github.com/bnb-chain/bnc-tendermint v0.32.3-binance.3.0.20221109023026-379ddbab19d1
-    github.com/zondax/ledger-cosmos-go => github.com/bnb-chain/ledger-cosmos-go v0.9.9-binance.3
-    github.com/zondax/ledger-go => github.com/bnb-chain/ledger-go v0.9.1
-    golang.org/x/crypto => github.com/tendermint/crypto v0.0.0-20190823183015-45b1026d81ae
-)
+replace github.com/tendermint/go-amino => github.com/binance-chain/bnc-go-amino v0.14.1-binance.1
 ```
 
-**NOTE**: Please make sure you have the same replace dep as [go.mod](https://github.com/aximchain/go-sdk/blob/master/go.mod).
+**NOTE**: Please make sure you use binance-chain amino repo instead of tendermint amino.
 
 ## Usage
 
 ### Key Manager
 
 Before start using API, you should construct a Key Manager to help sign the transaction msg or verify signature.
-Key Manager is an Identity Manager to define who you are in the AXCchain. It provide following interface:
+Key Manager is an Identity Manager to define who you are in the aximchain. It provide following interface:
 
 ```go
 type KeyManager interface {
@@ -75,7 +67,7 @@ NewLedgerKeyManager(path ledger.DerivationPath) (KeyManager, error)
 - NewMnemonicPathKeyManager. The difference between `NewMnemonicKeyManager` is that you can use custom keypath to generate different `keyManager` while using the same mnemonic. 5 levels in BIP44 path: "purpose' / coin_type' / account' / change / address_index", "purpose' / coin_type'" is fixed as "44'/714'/", you can customize the rest part.
 - NewKeyStoreKeyManager. You should provide a keybase json file and you password, you can download the key base json file when your create a wallet account.
 - NewPrivateKeyManager. You should provide a Hex encoded string of your private key.
-- NewLedgerKeyManager. You must have a ledger device with AXC Flash Chain ledger app and connect it to your machine.
+- NewLedgerKeyManager. You must have a ledger device with aximchain ledger app and connect it to your machine.
 
 Examples:
 
@@ -100,7 +92,7 @@ keyManager, err := NewPrivateKeyManager(priv)
 
 From ledger device:
 ```GO
-bip44Params := keys.NewBinanceBIP44Params(0, 0)
+bip44Params := keys.NewAximchainBIP44Params(0, 0)
 keyManager, err := NewLedgerKeyManager(bip44Params.DerivationPath())
 ```
 
@@ -130,7 +122,7 @@ assert.True(t, bytes.Equal(encryPlain1, encryPlain2))
 ### Init Client
 
 ```GO
-import sdk "https://github.com/aximchain/go-sdk/tree/master/client"
+import sdk "github.com/aximchain/go-sdk/client"
 
 mnemonic := "lock globe panda armed mandate fabric couple dove climb step stove price recall decrease fire sail ring media enhance excite deny valid ceiling arm"
 //-----   Init KeyManager  -------------
@@ -153,27 +145,27 @@ If you want broadcast some transactions, like send coins, create orders or cance
 
 ### Example
 
-Create a `SendToken` transaction:
+Create a `buy` order:
 ```go
-client.SendToken([]msg.Transfer{{testAccount, []ctypes.Coin{{nativeSymbol, 100000000}}}}, true)
+createOrderResult, err := client.CreateOrder(tradeSymbol, nativeSymbol, txmsg.OrderSide.BUY, 100000000, 100000000, true)
 ```
 
 If want to attach memo or source to the transaction, more `WithSource` and `WithMemo` options are required:
 ```go
-client.SendToken([]msg.Transfer{{testAccount, []ctypes.Coin{{nativeSymbol, 100000000}}}}, true, transaction.WithSource(100),transaction.WithMemo("test memo"))
+createOrderResult, err := client.CreateOrder(tradeSymbol, nativeSymbol, msg.OrderSide.BUY, 100000000, 100000000, true, transaction.WithSource(100),transaction.WithMemo("test memo"))
 ```
 
 In some scenarios, continuously send multi transactions very fast. Before the previous transaction being included in the chain, the next transaction is being sent, to avoid sequence mismatch error, option `WithAcNumAndSequence` is required:
 ```
 acc,err:=client.GetAccount(client.GetKeyManager().GetAddr().String())
-_, err = client.SendToken([]msg.Transfer{{testAccount, []ctypes.Coin{{nativeSymbol, 100000000}}}}, true, transaction.WithAcNumAndSequence(acc.Number,acc.Sequence))
-_, err = client.SendToken([]msg.Transfer{{testAccount, []ctypes.Coin{{nativeSymbol, 100000000}}}}, true, transaction.WithAcNumAndSequence(acc.Number,acc.Sequence+1))
-_, err = client.SendToken([]msg.Transfer{{testAccount, []ctypes.Coin{{nativeSymbol, 100000000}}}}, true, transaction.WithAcNumAndSequence(acc.Number,acc.Sequence+2))
+_, err = client.CreateOrder(tradeSymbol, nativeSymbol, msg.OrderSide.BUY, 100000000, 100000000, true, transaction.WithAcNumAndSequence(acc.Number,acc.Sequence))
+_, err = client.CreateOrder(tradeSymbol, nativeSymbol, msg.OrderSide.BUY, 100000000, 100000000, true, transaction.WithAcNumAndSequence(acc.Number,acc.Sequence+1))
+_, err = client.CreateOrder(tradeSymbol, nativeSymbol, msg.OrderSide.BUY, 100000000, 100000000, true, transaction.WithAcNumAndSequence(acc.Number,acc.Sequence+2))
 ```
 
-For more API usage documentation, please check the [wiki](https://github.com/aximchain/go-sdk/wiki)..
+For more API usage documentation, please check the [wiki](https://github.com/binance-chain/go-sdk/wiki)..
 
-## RPC Client
+## RPC Client(Beta)
 RPC endpoints may be used to interact with a node directly over HTTP or websockets. Using RPC, you may perform low-level
 operations like executing ABCI queries, viewing network/consensus state or broadcasting a transaction against full node or
 light client.
