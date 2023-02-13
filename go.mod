@@ -3,7 +3,7 @@ module github.com/aximchain/go-sdk
 go 1.17
 
 require (
-	github.com/aximchain/axc-cosmos-sdk v0.1.8
+	github.com/aximchain/axc-cosmos-sdk v0.1.9
 	github.com/aximchain/flash-node v0.1.5
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
