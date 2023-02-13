@@ -46,10 +46,10 @@ func NewParams(purpose, coinType, account uint32, change bool, addressIdx uint32
 	}
 }
 
-// NewBinanceBIP44Params creates a BIP 44 parameter object from the params:
+// NewAximchainBIP44Params creates a BIP 44 parameter object from the params:
 // m / 44' / 714' / account' / 0 / address_index
 // The fixed parameters (purpose', coin_type', and change) are determined by what was used in the binance ledger app.
-func NewBinanceBIP44Params(account uint32, addressIdx uint32) *BIP44Params {
+func NewAximchainBIP44Params(account uint32, addressIdx uint32) *BIP44Params {
 	return NewParams(BIPPurpose, BIPCoinType, account, BIPChange, addressIdx)
 }
 
@@ -126,7 +126,7 @@ func DerivePrivateKeyForPath(privKeyBytes [32]byte, chainCode [32]byte, path str
 // If harden is true, the derivation is 'hardened'.
 // It returns the new private key and new chain code.
 // For more information on hardened keys see:
-//  - https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+//   - https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
 func derivePrivateKey(privKeyBytes [32]byte, chainCode [32]byte, index uint32, harden bool) ([32]byte, [32]byte) {
 	var data []byte
 	if harden {

@@ -1,6 +1,6 @@
 package tx
 
-type Option func(msg *StdSignMsg) *StdSignMsg
+type Option func(*StdSignMsg) *StdSignMsg
 
 func WithSource(source int64) Option {
 	return func(txMsg *StdSignMsg) *StdSignMsg {

@@ -22,9 +22,7 @@ var (
 )
 
 type TransactionClient interface {
-	// CreateOrder deprecated
 	CreateOrder(baseAssetSymbol, quoteAssetSymbol string, op int8, price, quantity int64, sync bool, options ...Option) (*CreateOrderResult, error)
-	// CancelOrder deprecated
 	CancelOrder(baseAssetSymbol, quoteAssetSymbol, refId string, sync bool, options ...Option) (*CancelOrderResult, error)
 	BurnToken(symbol string, amount int64, sync bool, options ...Option) (*BurnTokenResult, error)
 	ListPair(proposalId int64, baseAssetSymbol string, quoteAssetSymbol string, initPrice int64, sync bool, options ...Option) (*ListPairResult, error)
@@ -33,7 +31,6 @@ type TransactionClient interface {
 	IssueToken(name, symbol string, supply int64, sync bool, mintable bool, options ...Option) (*IssueTokenResult, error)
 	SendToken(transfers []msg.Transfer, sync bool, options ...Option) (*SendTokenResult, error)
 	MintToken(symbol string, amount int64, sync bool, options ...Option) (*MintTokenResult, error)
-	TransferTokenOwnership(symbol string, newOwner types.AccAddress, sync bool, options ...Option) (*TransferTokenOwnershipResult, error)
 	TimeLock(description string, amount types.Coins, lockTime int64, sync bool, options ...Option) (*TimeLockResult, error)
 	TimeUnLock(id int64, sync bool, options ...Option) (*TimeUnLockResult, error)
 	TimeReLock(id int64, description string, amount types.Coins, lockTime int64, sync bool, options ...Option) (*TimeReLockResult, error)
@@ -99,7 +96,7 @@ func (c *client) broadcastMsg(m msg.Msg, sync bool, options ...Option) (*tx.TxCo
 
 	// special logic for createOrder, to save account query
 	if orderMsg, ok := m.(msg.CreateOrderMsg); ok {
-		orderMsg.Id = msg.GenerateOrderID(signMsg.Sequence+1, c.keyManager.GetAddr())
+		orderMsg.ID = msg.GenerateOrderID(signMsg.Sequence+1, c.keyManager.GetAddr())
 		signMsg.Msgs[0] = orderMsg
 	}
 

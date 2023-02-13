@@ -71,7 +71,7 @@ func TestSignTxNoError(t *testing.T) {
 		expectHexTx string
 		errMsg      string
 	}{
-		{msg.CreateSendMsg(test1Addr, ctypes.Coins{ctypes.Coin{Denom: "AXC", Amount: 100000000000000}}, []msg.Transfer{{test2Addr, ctypes.Coins{ctypes.Coin{Denom: "AXC", Amount: 100000000000000}}}}),
+		{msg.CreateSendMsg(test1Addr, ctypes.Coins{ctypes.Coin{Denom: "AXC", Amount: 100000000000000}}, []msg.Transfer{{test2KeyManager.GetAddr(), ctypes.Coins{ctypes.Coin{Denom: "AXC", Amount: 100000000000000}}}}),
 			test1KeyManager,
 			0,
 			1,

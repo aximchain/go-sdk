@@ -19,13 +19,13 @@ var (
 	sOnceClient         = sync.Once{}
 	sTestClientInstance *rpc.HTTP
 
-	jackAddress  = "axc1lrzg56jhtkqu7fmca3394vdx00r7apx4gwvj6w"
+	jackAddress  = "bnb1lrzg56jhtkqu7fmca3394vdx00r7apx4gwvj6w"
 	jackMnemonic = "orphan thing pelican flee spray sense sketch dutch opinion vessel fringe surround hurt theory hospital provide foil love stock vast shrug detail harbor pattern"
 
-	roseAddress  = "axc1rxnydtfjccaz2tck7wrentntdylrnnqzmvqvwn"
+	roseAddress  = "bnb1rxnydtfjccaz2tck7wrentntdylrnnqzmvqvwn"
 	roseMnemonic = "earth hamster near become enlist degree foil crucial weapon poverty mad purity chest lucky equal jazz pony either knee cloud drive badge jacket caught"
 
-	markAddress  = "axc1sh4cfzvcut9nywffs6gs5zkyt4pzeej6k84klt"
+	markAddress  = "bnb1sh4cfzvcut9nywffs6gs5zkyt4pzeej6k84klt"
 	markMnemonic = "depend water drink monitor earn praise permit autumn board cable impact wink wolf sting middle misery bridge stamp close very robust slam annual verify"
 
 	chainId     = "test-chain-qUlw6e"
@@ -42,7 +42,7 @@ func rpcClient() *rpc.HTTP {
 
 func getRpcClientWithKeyManager() *rpc.HTTP {
 	c := rpcClient()
-	ctypes.SetNetwork(ctypes.ProdNetwork)
+	ctypes.Network = ctypes.ProdNetwork
 	keyManager, _ := keys.NewMnemonicKeyManager(jackMnemonic)
 	c.SetKeyManager(keyManager)
 	return c
@@ -101,8 +101,8 @@ func TestEditSideChainValidator(t *testing.T) {
 	rate, _ := ctypes.NewDecFromStr("2")
 
 	sideFeeAddr := FromHex("0xd1B22dCC24C55f4d728E7aaA5c9b5a22e1512C08")
-	consAddr := FromHex("0xd1B22dCC24C55f4d728E7aaA5c9b5a22e1512C08")
-	res, err := c.EditSideChainValidator(types.RialtoNet, des, &rate, sideFeeAddr, consAddr, rpc.Sync, tx.WithChainID(chainId))
+
+	res, err := c.EditSideChainValidator(types.RialtoNet, des, &rate, sideFeeAddr, rpc.Sync, tx.WithChainID(chainId))
 
 	assert.NotNil(t, res)
 	assert.Nil(t, err)

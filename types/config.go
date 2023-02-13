@@ -8,7 +8,7 @@ const (
 	NativeSymbol            = "AXC"
 
 	ProdChainID    = "Aximchain-Tigris"
-	TestnetChainID = "Aximchain-Ganges"
+	TestnetChainID = "Aximchain-Nile"
 	KongoChainId   = "Aximchain-Kongo"
 	GangesChainId  = "Aximchain-Ganges"
 
