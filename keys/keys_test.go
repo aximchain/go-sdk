@@ -22,11 +22,11 @@ func TestRecoveryFromKeyWordsNoError(t *testing.T) {
 	assert.NoError(t, err)
 	acc := keyManager.GetAddr()
 	key := keyManager.GetPrivKey()
-	assert.Equal(t, "axc1ddt3ls9fjcd8mh69ujdg3fxc89qle2a7km33aa", acc.String())
+	assert.Equal(t, "axc1ddt3ls9fjcd8mh69ujdg3fxc89qle2a7e80akd", acc.String())
 	assert.NotNil(t, key)
 	customPathKey, err := NewMnemonicPathKeyManager(mnemonic, "1'/1/1")
 	assert.NoError(t, err)
-	assert.Equal(t, "axc1c67nwp7u5adl7gw0ffn3d47kttcm4crjy9mrye", customPathKey.GetAddr().String())
+	assert.Equal(t, "axc1c67nwp7u5adl7gw0ffn3d47kttcm4crjte900f", customPathKey.GetAddr().String())
 }
 
 func TestRecoveryFromKeyBaseNoError(t *testing.T) {

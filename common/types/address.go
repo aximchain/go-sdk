@@ -47,8 +47,8 @@ func (this ChainNetwork) Bech32Prefixes() string {
 func init() {
 	sdkConfig := types.GetConfig()
 	sdkConfig.SetBech32PrefixForAccount("axc", "axcp")
-	sdkConfig.SetBech32PrefixForValidator("bva", "bvap")
-	sdkConfig.SetBech32PrefixForConsensusNode("bca", "bcap")
+	sdkConfig.SetBech32PrefixForValidator("ava", "avap")
+	sdkConfig.SetBech32PrefixForConsensusNode("aca", "acap")
 }
 
 var (
