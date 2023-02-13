@@ -25,8 +25,8 @@ import (
 // After axcchain integration_test.sh has runned
 func TestTransProcess(t *testing.T) {
 	//----- Recover account ---------
-	mnemonic := "test mnemonic"
-	baeUrl := "testnet-dex.binance.org"
+	mnemonic := "swift slam quote sail high remain mandate sample now stamp title among fiscal captain joy puppy ghost arrow attract ozone situate install gain mean"
+	baeUrl := "put-dex-url-here" // TODO: update aximchain dex url
 	keyManager, err := keys.NewMnemonicKeyManager(mnemonic)
 	assert.NoError(t, err)
 	testAccount1 := keyManager.GetAddr()

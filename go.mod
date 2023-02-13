@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/aximchain/axc-cosmos-sdk v0.1.9
-	github.com/aximchain/flash-node v0.1.5
+	github.com/aximchain/flash-node v0.1.6
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
 	github.com/gorilla/websocket v1.4.1
